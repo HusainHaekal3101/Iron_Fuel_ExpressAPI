@@ -3,6 +3,8 @@ let path = require("path");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const PORT = process.env.PORT || 3000;
+
 require("dotenv").config();
 
 const { Pool } = require("pg");
@@ -37,7 +39,6 @@ app.post("/cart", async (req, res) => {
     try {
         const client = await pool.connect();
 
-        // Check if item already exists
         const existing = await client.query(
             "SELECT * FROM cart WHERE user_email = $1 AND product_id = $2",
             [user_email, product_id]
@@ -46,7 +47,7 @@ app.post("/cart", async (req, res) => {
         let result;
 
         if (existing.rows.length > 0) {
-            // If exists, update quantity
+
             result = await client.query(
                 `UPDATE cart 
          SET quantity = quantity + $1 
@@ -55,7 +56,7 @@ app.post("/cart", async (req, res) => {
                 [quantity, user_email, product_id]
             );
         } else {
-            // If not exists, insert new row
+
             result = await client.query(
                 `INSERT INTO cart 
          (user_email, product_id, product_name, price, quantity, image_url, created_at) 
@@ -139,7 +140,7 @@ app.post("/create-checkout-session", async (req, res) => {
                 product_data: {
                     name: item.product_name,
                 },
-                unit_amount: Math.round(item.price * 100), // Stripe uses cents
+                unit_amount: Math.round(item.price * 100),
             },
             quantity: item.quantity,
         }));
@@ -177,6 +178,6 @@ app.get("/", (req, res) => {
     res.status(200).json({ message: "Welcome to the IronFuel API!" });
 });
 
-app.listen(3000, () => {
-    console.log("App is listening on port 3000");
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
