@@ -178,6 +178,5 @@ app.get("/", (req, res) => {
     res.status(200).json({ message: "Welcome to the IronFuel API!" });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const serverless = require("serverless-http");
+module.exports = serverless(app);
