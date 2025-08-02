@@ -175,7 +175,7 @@ app.delete("/cart/clear/:user_email", async (req, res) => {
 
 
 app.get("/", (req, res) => {
-    res.status(200).json({ message: "Welcome to the IronFuel API!" });
+    res.send("Welcome to the IronFuel API!");
 });
 
 app.listen(PORT, () => {
