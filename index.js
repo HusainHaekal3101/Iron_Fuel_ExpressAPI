@@ -1,9 +1,9 @@
-let express = require("express");
-let path = require("path");
+const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 require("dotenv").config();
 
@@ -12,7 +12,7 @@ const DATABASE_URL = process.env.DATABASE_URL;
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-let app = express();
+const app = express();
 app.use(cors());
 app.use(express.json());
 
@@ -178,5 +178,7 @@ app.get("/", (req, res) => {
     res.status(200).json({ message: "Welcome to the IronFuel API!" });
 });
 
-const serverless = require("serverless-http");
-module.exports = serverless(app);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    getPostgresVersion().catch((err) => console.error("Failed to get Postgres version:", err));
+});
